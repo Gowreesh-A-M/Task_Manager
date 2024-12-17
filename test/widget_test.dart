@@ -1,30 +1,51 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+// test/task_provider_test.dart
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:task_manager/main.dart';
+import 'package:task_manager/models/task.dart';
+import 'package:task_manager/providers/task_provider.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('TaskProvider Tests', () {
+    late TaskProvider taskProvider;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    setUp(() {
+      taskProvider = TaskProvider();
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('Add task increases task list length', () {
+      final initialLength = taskProvider.tasks.length;
+      taskProvider.addTask('Test Task');
+      expect(taskProvider.tasks.length, equals(initialLength + 1));
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('Remove task decreases task list length', () {
+      taskProvider.addTask('Test Task');
+      final initialLength = taskProvider.tasks.length;
+      final taskToRemove = taskProvider.tasks.last;
+      taskProvider.removeTask(taskToRemove);
+      expect(taskProvider.tasks.length, equals(initialLength - 1));
+    });
+
+    test('Toggle task completion changes completion status', () {
+      taskProvider.addTask('Test Task');
+      final task = taskProvider.tasks.last;
+      final initialCompletionStatus = task.isCompleted;
+      taskProvider.toggleTaskCompletion(task);
+      expect(task.isCompleted, equals(!initialCompletionStatus));
+    });
+
+    test('Task model conversion works correctly', () {
+      final task = Task(
+        id: '1',
+        title: 'Test Task',
+        isCompleted: false,
+      );
+
+      final map = task.toMap();
+      final recreatedTask = Task.fromMap(map);
+
+      expect(recreatedTask.id, equals(task.id));
+      expect(recreatedTask.title, equals(task.title));
+      expect(recreatedTask.isCompleted, equals(task.isCompleted));
+    });
   });
 }

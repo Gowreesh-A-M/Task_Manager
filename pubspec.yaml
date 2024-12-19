@@ -41,7 +41,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.2.18
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -54,7 +55,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - assets/icon/checklist.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -94,3 +96,14 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/icon/checklist.png"
+
+flutter_native_splash:
+  color: "#ffffff" # Background color for the splash screen.
+  image: assets/icon/checklist.png # Path to your splash screen image.
+  android: true
+  ios: true
+  web: true
+
+  android_12:
+    color: "#ffffff"
+    image: assets/icon/checklist.png 
